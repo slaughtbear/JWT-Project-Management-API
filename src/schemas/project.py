@@ -2,8 +2,5 @@ from pydantic import BaseModel
 
 class Project(BaseModel):
     id: int
+    created_at: str
     name: str
-
-projects_list = [
-    Project(1, 'app fullstack con react y django')
-]
