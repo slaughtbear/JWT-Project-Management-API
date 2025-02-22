@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Path, HTTPException, status
-from fastapi.responses import JSONResponse
-from typing import Dict
+from typing import List, Dict
 from src.schemas.task import Task, TaskCreate, TaskUpdate
 from src.database.querys.tasks import get_all_tasks_bd, create_task_bd, update_task_bd, delete_task_bd
 from src.utils.functions import internal_server_error_exception, validate_task_before_creating, search_task
@@ -10,8 +9,8 @@ from src.utils.functions import internal_server_error_exception, validate_task_b
 tasks_router = APIRouter()
 
 
-@tasks_router.get("/")
-async def get_tasks():
+@tasks_router.get("/", response_model = List[Task])
+async def get_tasks() -> List[Task]:
     try:
         # Se obtienen todas las tareas de la base de datos
         tasks = get_all_tasks_bd()
@@ -25,7 +24,7 @@ async def get_tasks():
         )
     
     # Si todo sale bien, se retornan todas las tareas
-    return JSONResponse(content = tasks)
+    return tasks
 
 
 @tasks_router.get("/{id}", response_model = Task)
@@ -63,7 +62,7 @@ async def add_task(task_data: TaskCreate) -> Task:
         internal_server_error_exception(e)
 
 
-@tasks_router.put("/{id}")
+@tasks_router.put("/{id}", response_model = Task)
 async def update_task(task_data: TaskUpdate, id: int = Path(gt = 0)) -> Task:
     ''' Endpoint de tipo PUT para actualizar tareas de la base de datos.
 
