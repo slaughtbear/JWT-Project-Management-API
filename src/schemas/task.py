@@ -20,13 +20,3 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     project_id: Optional[int] = None
-
-
-# tasks_list = [
-#     Task(
-#         id=1,
-#         title='Project setup Django',
-#         description='Instalar y configurar el proyecto',
-#         project_id=1
-#     )
-# ]
