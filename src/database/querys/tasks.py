@@ -7,7 +7,7 @@ def get_all_tasks_bd():
 
 def get_one_task_bd(id: int):
     response = supabase.table("tasks").select("*").eq("id", id).execute()
-    return response.data
+    return response.data[0]
 
 
 def get_one_task_by_title_bd(title: str):
@@ -17,7 +17,7 @@ def get_one_task_by_title_bd(title: str):
 
 def create_task_bd(task_data):
     response = supabase.table("tasks").insert(task_data.model_dump()).execute()
-    return response.data
+    return response.data[0]
 
     
 def update_task_bd(task_data, id):
