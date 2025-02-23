@@ -7,11 +7,6 @@ from src.routes.jwt_auth import jwt_auth
 app = FastAPI()
 
 
-@app.get("/")
-async def main():
-    return {"message": "welcome to my to-do list api"}
-
-
 app.include_router(
     tasks_router,
     prefix = "/tasks",
@@ -28,6 +23,5 @@ app.include_router(
 
 app.include_router(
     jwt_auth,
-    prefix = "/auth",
     tags = ["Authentication"]
 )
