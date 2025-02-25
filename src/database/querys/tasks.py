@@ -7,12 +7,12 @@ def get_all_tasks_bd():
 
 def get_one_task_bd(id: int):
     response = supabase.table("tasks").select("*").eq("id", id).execute()
-    return response.data[0]
+    return None if not response.data else response.data[0]
 
 
 def get_one_task_by_title_bd(title: str):
     response = supabase.table("tasks").select("*").eq("title", title).execute()
-    return response.data
+    return None if not response.data else response.data[0]
 
 
 def create_task_bd(task_data):
