@@ -1,7 +1,9 @@
 from fastapi import HTTPException, status
 from src.database.querys.tasks import get_one_task_by_title_bd, get_one_task_bd
-from src.database.querys.projects import get_one_project
 from src.schemas.task import Task, TaskCreate
+from src.schemas.project import Project
+from src.database.querys.users import get_one_user_bd
+from src.database.querys.projects import get_one_project_bd
 
 
 def internal_server_error_exception(e: Exception):
@@ -31,7 +33,7 @@ def validate_task_before_creating(task_data: TaskCreate) -> None:
     try:
         # Se intenta realizar las consultas a la base de datos
         stored_task_title = get_one_task_by_title_bd(task_data.title)
-        stored_project = get_one_project(task_data.project_id)
+        stored_project = get_one_project_bd(task_data.project_id)
     except Exception as e: # Si ocurre un error en la consulta anterior se captura en este bloque
         internal_server_error_exception(e)
 
@@ -72,3 +74,51 @@ def search_task(id: int) -> Task:
     
     # Si todo sale bien se retorna la tarea
     return stored_task
+
+
+def search_user(id: int):
+    ''' Busca un usuario existente en la base de datos.
+    
+    Args:
+        id (int): El ID del usuario
+
+    Returns:
+        dict: Información del usuario en formato JSON
+    '''
+    try:
+        # Se intenta obtener el usuario que se busca en la base de datos
+        stored_user = get_one_user_bd(id) 
+    except Exception as e: # Si ocurre un error en la consulta anterior se captura en este bloque
+        internal_server_error_exception(e)
+
+    if not stored_user: # Si en la consulta no se obtiene ningún usuario, se lanza un error
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No se encontró el usuario."
+        )
+    
+    # Si todo sale bien se retorna el usuario
+    return stored_user
+
+
+def search_project(id: int) -> Project:
+    ''' Busca un proyecto existente en la base de datos.
+    
+    Args:
+        id (int): El ID del proyecto
+
+    Returns:
+        Project: El proyecto en formato JSON
+    '''
+    try:
+        stored_project = get_one_project_bd(id)
+    except Exception as e:
+        internal_server_error_exception(e)
+
+    if not stored_project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No se encontró el proyecto."
+        )
+    
+    return stored_project
