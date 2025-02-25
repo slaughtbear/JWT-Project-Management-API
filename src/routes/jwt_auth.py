@@ -1,9 +1,9 @@
+import os
+from typing import Annotated, Dict
+import jwt
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from typing import Annotated, Dict
-from dotenv import load_dotenv
-import os
-import jwt
 from src.database.querys.users import get_one_user_by_username_bd
 from src.utils.functions import internal_server_error_exception
 
