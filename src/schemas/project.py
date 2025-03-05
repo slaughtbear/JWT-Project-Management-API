@@ -8,6 +8,8 @@ class Project(BaseModel):
     created_at: str
     name: str
     description: Optional[str] = None
+    done: bool
+    id_user: int
 
 
 class ProjectCreate(BaseModel):
@@ -20,3 +22,4 @@ class ProjectUpdate(BaseModel):
     """Esquema para actualizar datos del proyecto."""
     name: Optional[str] = Field(None, max_length=100, min_length=3)
     description: Optional[str] = Field(None, max_length=255)
+    done: Optional[bool] = None
