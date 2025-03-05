@@ -1,12 +1,12 @@
 from ..config import supabase
 
-def get_all_tasks_bd():
-    response = supabase.table("tasks").select("*").execute()
+def get_all_tasks_bd(id_user: int):
+    response = supabase.table("tasks").select("*").eq("id_user", id_user).execute()
     return response.data
 
 
-def get_one_task_bd(id: int):
-    response = supabase.table("tasks").select("*").eq("id", id).execute()
+def get_one_task_bd(id_project: int, id_user: int):
+    response = supabase.table("tasks").select("*").eq("id", id_project).eq("id_user", id_user).execute()
     return None if not response.data else response.data[0]
 
 
@@ -15,8 +15,18 @@ def get_one_task_by_title_bd(title: str):
     return None if not response.data else response.data[0]
 
 
-def create_task_bd(task_data):
-    response = supabase.table("tasks").insert(task_data.model_dump()).execute()
+def create_task_bd(task_data, current_user):
+    task_dict = task_data.model_dump()
+    response = (
+        supabase.table("tasks")
+        .insert({
+            "title": task_dict["title"],
+            "description": task_dict["description"],
+            "project_id": task_dict["project_id"],
+            "id_user": current_user["id"]
+        })
+        .execute()
+    )
     return response.data[0]
 
     
