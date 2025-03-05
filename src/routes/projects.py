@@ -1,5 +1,5 @@
 # FastAPI
-from fastapi import APIRouter, Path, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 
 # Tipos de datos
 from typing import List, Dict
